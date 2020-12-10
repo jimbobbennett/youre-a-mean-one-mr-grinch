@@ -4,7 +4,7 @@ Ever wondered how much of a Grinch you are? This app can help you find out!
 
 This Python Flask app demonstrates using a Tensorflow model exported from [Lobe](https://lobe.ai) to detect if you are wearing a Grinch mask or not. The model is currently trained on me with a Grinch mask on and off, so you may get different results unless you train the model yourself!
 
-![Jim detected as Jim](./images/jim.png) ![The grinch detected as the grinch](./images/grinch.png)
+![The Grinch and Jim being detected](./images/grinch-jim.png)
 
 ## Train the model
 

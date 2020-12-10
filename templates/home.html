@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>You're a mean one, Mr Grinch!</title>
+        <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    </head>
+    <body>
+        <div class="center">
+            <div class="vid-border">
+                <video id="video" autoplay></video>
+            </div>
+        </div>
+        <br/>
+        <div class="centerButton">
+            <button id="capture" class="greenButton">Are you a Grinch?</button>
+        </div>
+        <h1 id="message" class="resultText"></h1>
+        <h1 id="values" class="valuesText"></h1>
+
+        <script type="text/javascript">
+            window.addEventListener("DOMContentLoaded", function() {
+                var video = document.getElementById('video');
+
+                if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+                    const getImage = async () => {
+                        video.srcObject = await navigator.mediaDevices.getUserMedia({ video: true })
+                        video.play();
+                    }
+                    getImage()
+                }
+
+                var message = document.getElementById('message');
+                var values = document.getElementById('values');
+                
+                document.getElementById('capture').addEventListener('click', function() {
+                    var canvas = document.createElement('canvas');
+                    canvas.width = 640;
+                    canvas.height = 480;
+
+                    var context = canvas.getContext('2d');
+                    context.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+                    var data = {
+                        'image_base64': canvas.toDataURL("image/png")
+                    }
+
+                    const getResult = async () => {
+                        var result = await fetch('result', {
+                            method: 'POST',
+                            body: JSON.stringify(data),
+                            headers: { 'Content-Type': 'application/json' }
+                        })
+
+                        var jsonResult = await result.json()
+                        message.textContent = jsonResult.message
+                        values.textContent = jsonResult.values
+                    }
+                    getResult()
+                });
+            })
+        </script>
+    </body>
+</html>
